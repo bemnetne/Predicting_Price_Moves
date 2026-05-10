@@ -8,10 +8,9 @@ from collections import Counter
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from sklearn.feature_extraction.text import CountVectorizer
 from wordcloud import WordCloud
-from src.data_loader import load_data, remove_nulls
 from IPython.display import display
-import sys
-import os
+
+
 
 def load_data(filepath):
     """Load a stock CSV file and return a clean, date-indexed DataFrame."""
@@ -34,6 +33,26 @@ def remove_nulls(df):
         print(f"Removed {removed} row(s) with missing values. {after} rows remaining.")
     else:
         print(f"No missing values found. All {after} rows kept.")
+    return df
+def fill_nulls(df):
+    """
+    Fill missing values using forward fill.
+    """
+
+    if df.isnull().values.any():
+
+        missing_count = df.isnull().sum().sum()
+
+        print(
+            f"Found {missing_count} missing values. "
+            "Filling with forward fill."
+        )
+
+        df = df.ffill()
+
+    else:
+        print("No missing values found.")
+
     return df
 def show_duplicates(df):
     """Remove rows that have any missing values. Print a summary of what was removed."""
